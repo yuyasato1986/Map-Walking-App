@@ -2,19 +2,14 @@
 window.AvatarSystem = (function () {
     const avatars = [
         {
-            id: 'walker-1',
-            name: 'Casual Walker',
-            src: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMjAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjMwIiByPSIyMCIgZmlsbD0iIzM4YmRmOCIvPjxyZWN0IHg9IjMwIiB5PSI2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjcwIiByeD0iMTAiIGZpbGw9IiNmOGZhZmMiLz48cmVjdCB4PSIzNSIgeT0iMTQwIiB3aWR0aD0iMTIiIGhlaWdodD0iNTAiIGZpbGw9IiM5NGEzYjgiLz48cmVjdCB4PSI1MyIgeT0iMTQwIiB3aWR0aD0iMTIiIGhlaWdodD0iNTAiIGZpbGw9IiM5NGEzYjgiLz48L3N2Zz4=`
+            id: 'walker-red',
+            name: '女の子 (赤)',
+            src: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMjAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjMwIiByPSIyMiIgZmlsbD0iI2Y4NzE3MSIvPjxwYXRoIGQ9Ik0zMCw2MCBMNzAsNjAgTDgwLDEzMCBMMTAsMTMwIFoiIGZpbGw9IiNmO2ZhZmMiLz48cmVjdCB4PSIyMCIgeT0iNjUiIHdpZHRoPSI2MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2VmNDQ0NCIvPjxyZWN0IHg9IjM1IiB5PSIxMzAiIHdpZHRoPSIxMiIgaGVpZ2h0PSI2MCIgZmlsbD0iIzY0NzQ4YiIvPjxyZWN0IHg9IjUzIiB5PSIxMzAiIHdpZHRoPSIxMiIgaGVpZ2h0PSI2MCIgZmlsbD0iIzY0NzQ4YiIvPjwvc3ZnPg==`
         },
         {
-            id: 'walker-2',
-            name: 'Sporty Walker',
-            src: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMjAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjMwIiByPSIyMCIgZmlsbD0iI2VmNDQ0NCIvPjxyZWN0IHg9IjMwIiB5PSI2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjcwIiByeD0iMTAiIGZpbGw9IiNmOGZhZmMiLz48cmVjdCB4PSIzNSIgeT0iMTQwIiB3aWR0aD0iMTIiIGhlaWdodD0iNTAiIGZpbGw9IiM5NGEzYjgiLz48cmVjdCB4PSI1MyIgeT0iMTQwIiB3aWR0aD0iMTIiIGhlaWdodD0iNTAiIGZpbGw9IiM5NGEzYjgiLz48cmVjdCB4PSIyMCIgeT0iNzAiIHdpZHRoPSIxMCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2VmNDQ0NCIvPjxyZWN0IHg9IjcwIiB5PSI3MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWY0NDQ0Ii8+PC9zdmc+`
-        },
-        {
-            id: 'pekingese',
-            name: 'Pekingese',
-            src: 'pekingese.png'
+            id: 'walker-blue',
+            name: '男の子 (青)',
+            src: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMjAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjMwIiByPSIyMCIgZmlsbD0iIzM4YmRmOCIvPjxyZWN0IHg9IjMwIiB5PSI2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjcyIiByeD0iMTIiIGZpbGw9IiM2MDhhZjgiLz48cmVjdCB4PSIzNSIgeT0iMTQwIiB3aWR0aD0iMTIiIGhlaWdodD0iNTUiIGZpbGw9IiM0NzU1NjkiLz48cmVjdCB4PSI1MyIgeT0iMTQwIiB3aWR0aD0iMTIiIGhlaWdodD0iNTUiIGZpbGw9IiM0NzU1NjkiLz48L3N2Zz4=`
         }
     ];
 

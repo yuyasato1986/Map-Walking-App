@@ -14,7 +14,7 @@ const state = {
     isWalking: false,
     speed: 3, // Multiplier
     animationId: null,
-    currentAvatar: 'pekingese',
+    currentAvatar: 'walker-red',
     heading: 0,
     marker: null,
     lastPanoPos: null
@@ -66,6 +66,21 @@ function initUI() {
 
     // Route
     document.getElementById('calculate-route-btn').addEventListener('click', calculateRoute);
+
+    // Sidebar Toggle (Mobile)
+    const toggleBtn = document.getElementById('sidebar-toggle');
+    const sidebar = document.getElementById('sidebar');
+    if (toggleBtn && sidebar) {
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            const icon = toggleBtn.querySelector('i');
+            if (sidebar.classList.contains('open')) {
+                icon.className = 'fa-solid fa-xmark';
+            } else {
+                icon.className = 'fa-solid fa-bars';
+            }
+        });
+    }
 }
 
 function initUI_refreshAvatarSelection(selectedId) {
@@ -86,7 +101,7 @@ function loadGoogleMaps(key) {
     script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places,geometry&callback=initMap`;
     script.async = true;
     script.defer = true;
-    script.onerror = () => alert('Failed to load Google Maps API. Check your key.');
+    script.onerror = () => alert('Google Maps APIの読み込みに失敗しました。APIキーを確認してください。');
     document.head.appendChild(script);
 
     window.initMap = initMap;
@@ -139,7 +154,7 @@ function initMap() {
     // Marker for the walker
     state.marker = new google.maps.Marker({
         map: state.map,
-        title: "You are here",
+        title: "現在地",
         icon: {
             path: google.maps.SymbolPath.CIRCLE,
             scale: 7,
@@ -158,7 +173,7 @@ async function calculateRoute() {
     const destination = document.getElementById('destination-input').value;
 
     if (!origin || !destination) {
-        alert('Please enter both start and end points.');
+        alert('出発点と目的地の両方を入力してください。');
         return;
     }
 
@@ -226,7 +241,7 @@ async function calculateRoute() {
         toggleWalking();
 
     } catch (error) {
-        alert('Could not calculate route: ' + error);
+        alert('ルートを計算できませんでした: ' + error);
         console.error(error);
     } finally {
         document.getElementById('loading-overlay').classList.add('hidden');
@@ -281,7 +296,7 @@ function walkLoop() {
         state.pathIndex = state.currentPath.length - 1;
         document.getElementById('play-pause-btn').innerHTML = '<i class="fa-solid fa-play"></i>';
         if (window.AvatarSystem) AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, false);
-        alert('Arrived at destination!');
+        alert('目的地に到着しました！');
         return;
     }
 

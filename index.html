@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pseudo-Walk: Virtual Stroll Experience</title>
+    <title>バーチャル散歩: バーチャルお散歩体験</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -18,43 +18,46 @@
 <body>
 
     <div id="app-container">
+        <button id="sidebar-toggle" class="mobile-only">
+            <i class="fa-solid fa-bars"></i>
+        </button>
         <!-- Sidebar / Control Panel -->
         <aside id="sidebar">
             <div class="header">
-                <h1>Pseudo-Walk</h1>
-                <p>Virtual Walking Experience</p>
+                <h1>バーチャル散歩</h1>
+                <p>バーチャルお散歩体験</p>
             </div>
 
 
             <div class="route-controls">
                 <div class="input-group">
                     <i class="fa-solid fa-location-dot icon-origin"></i>
-                    <input type="text" id="origin-input" placeholder="Start: e.g., Tokyo Station">
+                    <input type="text" id="origin-input" placeholder="出発点: 例「東京駅」">
                 </div>
                 <div class="input-group">
                     <i class="fa-solid fa-flag-checkered icon-dest"></i>
-                    <input type="text" id="destination-input" placeholder="End: e.g., Imperial Palace">
+                    <input type="text" id="destination-input" placeholder="目的地: 例「皇居」">
                 </div>
                 <button id="calculate-route-btn" class="primary-btn">
-                    <i class="fa-solid fa-route"></i> Get Route
+                    <i class="fa-solid fa-route"></i> ルートを取得
                 </button>
             </div>
 
             <div class="playback-controls" id="playback-controls" style="display: none;">
                 <div class="control-buttons">
-                    <button id="play-pause-btn" class="control-btn" title="Play/Pause"><i
+                    <button id="play-pause-btn" class="control-btn" title="再生/一時停止"><i
                             class="fa-solid fa-play"></i></button>
-                    <button id="reset-btn" class="control-btn" title="Reset"><i
+                    <button id="reset-btn" class="control-btn" title="リセット"><i
                             class="fa-solid fa-rotate-left"></i></button>
                 </div>
                 <div class="speed-control">
-                    <label for="speed-slider">Speed</label>
+                    <label for="speed-slider">速度</label>
                     <input type="range" id="speed-slider" min="1" max="10" value="3">
                 </div>
             </div>
 
             <div class="avatar-selector">
-                <h3>Select Walker</h3>
+                <h3>アバター選択</h3>
                 <div class="avatars" id="avatar-list">
                     <!-- Avatars injected by JS -->
                 </div>
@@ -71,7 +74,7 @@
             </div>
             <div id="loading-overlay" class="hidden">
                 <div class="spinner"></div>
-                <p>Loading Route...</p>
+                <p>ルートを読み込み中...</p>
             </div>
         </main>
     </div>
