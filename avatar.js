@@ -10,6 +10,11 @@ window.AvatarSystem = (function () {
             id: 'walker-2',
             name: 'Sporty Walker',
             src: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMjAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjMwIiByPSIyMCIgZmlsbD0iI2VmNDQ0NCIvPjxyZWN0IHg9IjMwIiB5PSI2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjcwIiByeD0iMTAiIGZpbGw9IiNmOGZhZmMiLz48cmVjdCB4PSIzNSIgeT0iMTQwIiB3aWR0aD0iMTIiIGhlaWdodD0iNTAiIGZpbGw9IiM5NGEzYjgiLz48cmVjdCB4PSI1MyIgeT0iMTQwIiB3aWR0aD0iMTIiIGhlaWdodD0iNTAiIGZpbGw9IiM5NGEzYjgiLz48cmVjdCB4PSIyMCIgeT0iNzAiIHdpZHRoPSIxMCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2VmNDQ0NCIvPjxyZWN0IHg9IjcwIiB5PSI3MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWY0NDQ0Ii8+PC9zdmc+`
+        },
+        {
+            id: 'pekingese',
+            name: 'Pekingese',
+            src: 'pekingese.png'
         }
     ];
 

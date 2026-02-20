@@ -14,7 +14,7 @@ const state = {
     isWalking: false,
     speed: 3, // Multiplier
     animationId: null,
-    currentAvatar: 'walker-1',
+    currentAvatar: 'pekingese',
     heading: 0,
     marker: null,
     lastPanoPos: null
