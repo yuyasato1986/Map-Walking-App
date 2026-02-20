@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pseudo-Walk: Virtual Stroll Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="app-container">
+        <!-- Sidebar / Control Panel -->
+        <aside id="sidebar">
+            <div class="header">
+                <h1>Pseudo-Walk</h1>
+                <p>Virtual Walking Experience</p>
+            </div>
+
+            <div class="api-key-section">
+                <label for="api-key-input" class="label-small">Google Maps API Key</label>
+                <div class="input-group">
+                    <input type="password" id="api-key-input" placeholder="Enter your API Key">
+                    <button id="set-api-key-btn"><i class="fa-solid fa-check"></i></button>
+                </div>
+                <p class="hint">Key must have "Maps JS" & "Directions" enabled.</p>
+            </div>
+
+            <div class="route-controls">
+                <div class="input-group">
+                    <i class="fa-solid fa-location-dot icon-origin"></i>
+                    <input type="text" id="origin-input" placeholder="Start: e.g., Tokyo Station">
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-flag-checkered icon-dest"></i>
+                    <input type="text" id="destination-input" placeholder="End: e.g., Imperial Palace">
+                </div>
+                <button id="calculate-route-btn" class="primary-btn">
+                    <i class="fa-solid fa-route"></i> Get Route
+                </button>
+            </div>
+
+            <div class="playback-controls" id="playback-controls" style="display: none;">
+                <div class="control-buttons">
+                    <button id="play-pause-btn" class="control-btn" title="Play/Pause"><i class="fa-solid fa-play"></i></button>
+                    <button id="reset-btn" class="control-btn" title="Reset"><i class="fa-solid fa-rotate-left"></i></button>
+                </div>
+                <div class="speed-control">
+                    <label for="speed-slider">Speed</label>
+                    <input type="range" id="speed-slider" min="1" max="10" value="3">
+                </div>
+            </div>
+
+            <div class="avatar-selector">
+                <h3>Select Walker</h3>
+                <div class="avatars" id="avatar-list">
+                    <!-- Avatars injected by JS -->
+                </div>
+            </div>
+
+            <div id="mini-map"></div>
+        </aside>
+
+        <!-- Main Viewport -->
+        <main id="viewport">
+            <div id="street-view"></div>
+            <div id="avatar-overlay">
+                <!-- Avatar SVG/Image goes here -->
+            </div>
+            <div id="loading-overlay" class="hidden">
+                <div class="spinner"></div>
+                <p>Loading Route...</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script loading is handled in main.js -->
+    <script type="module" src="main.js"></script>
+</body>
+</html>
