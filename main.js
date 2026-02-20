@@ -1,10 +1,9 @@
 
-import { avatars, renderAvatars, updateAvatarOverlay } from './avatar.js';
-import { config } from './config.js';
+// Remove imports, use globals: global.APP_CONFIG, global.AvatarSystem
 
 // State
 const state = {
-    apiKey: config.GOOGLE_MAPS_API_KEY || localStorage.getItem('google_maps_api_key') || '',
+    apiKey: (window.APP_CONFIG && window.APP_CONFIG.GOOGLE_MAPS_API_KEY) || localStorage.getItem('google_maps_api_key') || '',
     map: null,
     panorama: null,
     directionsService: null,
@@ -43,30 +42,30 @@ function initUI() {
     });
 
     // Avatars
-    renderAvatars('avatar-list', (id) => {
-        state.currentAvatar = id;
-        // Re-render to update selection style
-        renderAvatars('avatar-list', (newId) => {
-            state.currentAvatar = newId;
-            updateAvatarOverlay('avatar-overlay', state.currentAvatar, state.isWalking);
-            renderAvatars('avatar-list', null, state.currentAvatar); // redraw selection
+    if (window.AvatarSystem) {
+        AvatarSystem.renderAvatars('avatar-list', (id) => {
+            state.currentAvatar = id;
+            // Re-render to update selection style
+            AvatarSystem.renderAvatars('avatar-list', (newId) => {
+                state.currentAvatar = newId;
+                AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, state.isWalking);
+                AvatarSystem.renderAvatars('avatar-list', null, state.currentAvatar); // redraw selection
+            }, state.currentAvatar);
+
+            AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, state.isWalking);
         }, state.currentAvatar);
 
-        updateAvatarOverlay('avatar-overlay', state.currentAvatar, state.isWalking);
-    }, state.currentAvatar);
+        // Initial render wrapper logic embedded above for simplicity in global scope context
+        // But for initial load:
+        AvatarSystem.renderAvatars('avatar-list', (id) => {
+            state.currentAvatar = id;
+            AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, state.isWalking);
+            // recursive simple re-bind for selection UI update
+            initUI_refreshAvatarSelection(id);
+        }, state.currentAvatar);
 
-    // Initial render
-    renderAvatars('avatar-list', (id) => {
-        state.currentAvatar = id;
-        updateAvatarOverlay('avatar-overlay', state.currentAvatar, state.isWalking);
-        // recursive re-render to separate concerns would be better, but for now just re-calling the init logic is messy.
-        // Let's simplify.
-        // Actually, let's just make the callback update the state and internal DOM, checking the implementation of renderAvatars.
-        // checking avatar.js... it clears innerHTML. So we need to re-render the whole list to change class 'selected'.
-        renderAvatarsWrapper(id);
-    }, state.currentAvatar);
-
-    updateAvatarOverlay('avatar-overlay', state.currentAvatar, false);
+        AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, false);
+    }
 
     // Playback
     document.getElementById('play-pause-btn').addEventListener('click', toggleWalking);
@@ -79,12 +78,12 @@ function initUI() {
     document.getElementById('calculate-route-btn').addEventListener('click', calculateRoute);
 }
 
-// Wrapper to handle re-rendering for selection state
-function renderAvatarsWrapper(selectedId) {
-    renderAvatars('avatar-list', (id) => {
+function initUI_refreshAvatarSelection(selectedId) {
+    if (!window.AvatarSystem) return;
+    AvatarSystem.renderAvatars('avatar-list', (id) => {
         state.currentAvatar = id;
-        updateAvatarOverlay('avatar-overlay', state.currentAvatar, state.isWalking);
-        renderAvatarsWrapper(id);
+        AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, state.isWalking);
+        initUI_refreshAvatarSelection(id);
     }, selectedId);
 }
 
@@ -225,14 +224,14 @@ function toggleWalking() {
         state.isWalking = false;
         cancelAnimationFrame(state.animationId);
         btn.innerHTML = '<i class="fa-solid fa-play"></i>';
-        updateAvatarOverlay('avatar-overlay', state.currentAvatar, false);
+        if (window.AvatarSystem) AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, false);
     } else {
         // Play
         if (state.currentPath.length === 0) return;
         state.isWalking = true;
         btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
         walkLoop();
-        updateAvatarOverlay('avatar-overlay', state.currentAvatar, true);
+        if (window.AvatarSystem) AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, true);
     }
 }
 
@@ -242,17 +241,11 @@ function resetWalking() {
     state.pathIndex = 0;
     updatePosition(0);
     document.getElementById('play-pause-btn').innerHTML = '<i class="fa-solid fa-play"></i>';
-    updateAvatarOverlay('avatar-overlay', state.currentAvatar, false);
+    if (window.AvatarSystem) AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, false);
 }
 
 function walkLoop() {
     if (!state.isWalking) return;
-
-    // Speed determines how many points we skip/advance per frame (or update frequency)
-    // For simplicity, we just increment index based on speed roughly
-    // A better approach would be time-based delta, but this is a prototype
-
-    // Slow down the loop slightly to be realistic, or just use speed to skip frames
 
     // Speed determines how many points we skip/advance per frame.
     // Points are interpolated to be ~5 meters apart.
@@ -269,7 +262,7 @@ function walkLoop() {
         state.isWalking = false;
         state.pathIndex = state.currentPath.length - 1;
         document.getElementById('play-pause-btn').innerHTML = '<i class="fa-solid fa-play"></i>';
-        updateAvatarOverlay('avatar-overlay', state.currentAvatar, false);
+        if (window.AvatarSystem) AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, false);
         alert('Arrived at destination!');
         return;
     }
