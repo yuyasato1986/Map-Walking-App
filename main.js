@@ -3,7 +3,7 @@
 
 // State
 const state = {
-    apiKey: (window.APP_CONFIG && window.APP_CONFIG.GOOGLE_MAPS_API_KEY) || localStorage.getItem('google_maps_api_key') || '',
+    apiKey: (window.APP_CONFIG && window.APP_CONFIG.GOOGLE_MAPS_API_KEY) || '',
     map: null,
     panorama: null,
     directionsService: null,
@@ -15,7 +15,9 @@ const state = {
     speed: 3, // Multiplier
     animationId: null,
     currentAvatar: 'walker-1',
-    heading: 0
+    heading: 0,
+    marker: null,
+    lastPanoPos: null
 };
 
 // --- Initialization ---
@@ -23,23 +25,11 @@ const state = {
 document.addEventListener('DOMContentLoaded', () => {
     initUI();
     if (state.apiKey) {
-        document.getElementById('api-key-input').value = state.apiKey;
         loadGoogleMaps(state.apiKey);
     }
 });
 
 function initUI() {
-    // API Key
-    document.getElementById('set-api-key-btn').addEventListener('click', () => {
-        const key = document.getElementById('api-key-input').value.trim();
-        if (key) {
-            localStorage.setItem('google_maps_api_key', key);
-            state.apiKey = key;
-            loadGoogleMaps(key);
-            alert('API Key saved! Reloading...'); // Reload to load script
-            location.reload();
-        }
-    });
 
     // Avatars
     if (window.AvatarSystem) {
@@ -145,6 +135,20 @@ function initMap() {
     // Autocomplete
     new google.maps.places.Autocomplete(document.getElementById('origin-input'));
     new google.maps.places.Autocomplete(document.getElementById('destination-input'));
+
+    // Marker for the walker
+    state.marker = new google.maps.Marker({
+        map: state.map,
+        title: "You are here",
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 7,
+            fillColor: "#38bdf8",
+            fillOpacity: 1,
+            strokeWeight: 2,
+            strokeColor: "#ffffff"
+        }
+    });
 }
 
 // --- Route Logic ---
@@ -175,17 +179,28 @@ async function calculateRoute() {
         state.directionsRenderer.setDirections(response);
         state.currentRoute = response.routes[0];
 
-        // Flatten path for processing
+        // Generate detailed path from steps
         state.currentPath = [];
-        const overviewPath = state.currentRoute.overview_path;
+        const detailedPath = [];
+        const legs = state.currentRoute.legs;
+        for (const leg of legs) {
+            for (const step of leg.steps) {
+                for (const point of step.path) {
+                    // Avoid strict duplicates to prevent heading issues
+                    if (detailedPath.length === 0 || !point.equals(detailedPath[detailedPath.length - 1])) {
+                        detailedPath.push(point);
+                    }
+                }
+            }
+        }
 
-        // Interpolate for smoother walking (simple linear interpolation)
-        for (let i = 0; i < overviewPath.length - 1; i++) {
-            const start = overviewPath[i];
-            const end = overviewPath[i + 1];
+        // Interpolate for smoother walking
+        for (let i = 0; i < detailedPath.length - 1; i++) {
+            const start = detailedPath[i];
+            const end = detailedPath[i + 1];
             state.currentPath.push(start);
 
-            // Add intermediate points (every ~5 meters roughly)
+            // Add intermediate points (every ~5 meters)
             const dist = google.maps.geometry.spherical.computeDistanceBetween(start, end);
             const steps = Math.floor(dist / 5);
 
@@ -195,7 +210,7 @@ async function calculateRoute() {
                 state.currentPath.push(interp);
             }
         }
-        state.currentPath.push(overviewPath[overviewPath.length - 1]);
+        state.currentPath.push(detailedPath[detailedPath.length - 1]);
 
         // Reset state
         state.pathIndex = 0;
@@ -206,6 +221,9 @@ async function calculateRoute() {
 
         // Enable controls
         document.getElementById('playback-controls').style.display = 'block';
+
+        // Auto-start walking
+        toggleWalking();
 
     } catch (error) {
         alert('Could not calculate route: ' + error);
@@ -267,34 +285,64 @@ function walkLoop() {
         return;
     }
 
-    updatePosition(Math.floor(state.pathIndex));
+    updatePosition(state.pathIndex);
 
     state.animationId = requestAnimationFrame(walkLoop);
 }
 
-function updatePosition(index) {
+function updatePosition(indexFloat) {
     if (!state.map || !state.panorama) return;
 
-    const point = state.currentPath[index];
-    const nextPoint = state.currentPath[index + 1] || point;
+    const i = Math.floor(indexFloat);
+    const fraction = indexFloat - i;
 
-    // Calculate heading to next point
-    const heading = google.maps.geometry.spherical.computeHeading(point, nextPoint);
+    const startPoint = state.currentPath[i];
+    const endPoint = state.currentPath[i + 1];
 
-    // Only update heading if we are moving significantly
-    if (index < state.currentPath.length - 1) {
+    if (!startPoint) return;
+
+    // Interpolate current position
+    let currentPos = startPoint;
+    if (endPoint) {
+        currentPos = google.maps.geometry.spherical.interpolate(startPoint, endPoint, fraction);
+    }
+
+    // Look ahead logic for smoother heading
+    const lookAheadIndex = Math.min(Math.floor(indexFloat + 5), state.currentPath.length - 1);
+    const lookAheadPoint = state.currentPath[lookAheadIndex];
+
+    // Calculate heading
+    if (lookAheadPoint && !currentPos.equals(lookAheadPoint)) {
+        const heading = google.maps.geometry.spherical.computeHeading(currentPos, lookAheadPoint);
         state.heading = heading;
     }
 
-    // Update Street View
-    // Note: setPosition finds the nearest panorama. It might jump if points are far from road.
-    state.panorama.setPosition(point);
+    // --- Street View Update Throttling ---
+    // Update Street View position only if moved more than 2.5 meters
+    let shouldUpdatePano = false;
+    if (!state.lastPanoPos) {
+        shouldUpdatePano = true;
+    } else {
+        const distMoved = google.maps.geometry.spherical.computeDistanceBetween(state.lastPanoPos, currentPos);
+        if (distMoved > 2.5) {
+            shouldUpdatePano = true;
+        }
+    }
+
+    if (shouldUpdatePano) {
+        state.panorama.setPosition(currentPos);
+        state.lastPanoPos = currentPos;
+    }
+
+    // Update POV every frame for smooth rotation
     state.panorama.setPov({
         heading: state.heading,
         pitch: 0
     });
 
-    // Update Map Marker (optional, but good for feedback)
-    // could add a marker tracking logic here
-    state.map.panTo(point);
+    // Update Map Marker & Map Center every frame
+    if (state.marker) {
+        state.marker.setPosition(currentPos);
+    }
+    state.map.panTo(currentPos);
 }

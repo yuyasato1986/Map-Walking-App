@@ -45,7 +45,7 @@ body {
     flex-direction: column;
     gap: 24px;
     z-index: 100;
-    box-shadow: 4px 0 24px rgba(0,0,0,0.3);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease;
 }
 
@@ -67,7 +67,7 @@ body {
 .input-group {
     display: flex;
     align-items: center;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     border: var(--glass-border);
     border-radius: var(--radius-md);
     padding: 0 12px;
@@ -85,8 +85,13 @@ body {
     font-size: 0.9rem;
 }
 
-.icon-origin { color: var(--accent-color) !important; }
-.icon-dest { color: var(--danger-color) !important; }
+.icon-origin {
+    color: var(--accent-color) !important;
+}
+
+.icon-dest {
+    color: var(--danger-color) !important;
+}
 
 input {
     background: transparent;
@@ -98,18 +103,6 @@ input {
     font-size: 0.95rem;
 }
 
-.label-small {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    margin-bottom: 4px;
-    display: block;
-}
-
-.hint {
-    font-size: 0.7rem;
-    color: var(--text-secondary);
-    margin-top: 4px;
-}
 
 /* Buttons */
 button {
@@ -143,11 +136,14 @@ button {
     color: var(--success-color);
     padding: 8px;
 }
-#set-api-key-btn:hover { color: #4ade80; }
+
+#set-api-key-btn:hover {
+    color: #4ade80;
+}
 
 /* Playback Controls */
 .playback-controls {
-    background: rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
     padding: 16px;
     border-radius: var(--radius-md);
     border: var(--glass-border);
@@ -165,7 +161,7 @@ button {
     height: 48px;
     border-radius: 50%;
     border: var(--glass-border);
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     color: var(--text-primary);
     font-size: 1.2rem;
     display: flex;
@@ -174,7 +170,7 @@ button {
 }
 
 .control-btn:hover {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     border-color: var(--accent-color);
 }
 
@@ -192,10 +188,11 @@ button {
 input[type="range"] {
     flex: 1;
     height: 4px;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 2px;
     appearance: none;
 }
+
 input[type="range"]::-webkit-slider-thumb {
     appearance: none;
     width: 16px;
@@ -212,24 +209,27 @@ input[type="range"]::-webkit-slider-thumb {
     overflow-x: auto;
     padding-bottom: 8px;
 }
+
 .avatar-option {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     border: 2px solid transparent;
     cursor: pointer;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     transition: all 0.2s;
 }
+
 .avatar-option img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+
 .avatar-option.selected {
     border-color: var(--accent-color);
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
@@ -242,7 +242,8 @@ input[type="range"]::-webkit-slider-thumb {
     border-radius: var(--radius-md);
     overflow: hidden;
     border: var(--glass-border);
-    margin-top: auto; /* Push to bottom of sidebar */
+    margin-top: auto;
+    /* Push to bottom of sidebar */
 }
 
 #viewport {
@@ -262,16 +263,24 @@ input[type="range"]::-webkit-slider-thumb {
     left: 50%;
     transform: translateX(-50%);
     width: 200px;
-    pointer-events: none; /* Let clicks pass through to street view */
+    pointer-events: none;
+    /* Let clicks pass through to street view */
     z-index: 10;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
     transition: transform 0.2s;
 }
 
 /* Walking Animation */
 @keyframes walk-bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-10px); }
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-10px);
+    }
 }
 
 .walking-anim {
@@ -294,15 +303,23 @@ input[type="range"]::-webkit-slider-thumb {
     z-index: 50;
     color: var(--text-primary);
 }
-.hidden { display: none !important; }
+
+.hidden {
+    display: none !important;
+}
 
 .spinner {
     width: 40px;
     height: 40px;
-    border: 4px solid rgba(255,255,255,0.1);
+    border: 4px solid rgba(255, 255, 255, 0.1);
     border-top-color: var(--accent-color);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 16px;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -4,12 +4,12 @@ window.AvatarSystem = (function () {
         {
             id: 'walker-1',
             name: 'Casual Walker',
-            src: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 200"><circle cx="50" cy="30" r="20" fill="%2338bdf8"/><rect x="30" y="60" width="40" height="70" rx="10" fill="%23f8fafc"/><rect x="35" y="140" width="12" height="50" fill="%2394a3b8"/><rect x="53" y="140" width="12" height="50" fill="%2394a3b8"/></svg>`
+            src: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMjAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjMwIiByPSIyMCIgZmlsbD0iIzM4YmRmOCIvPjxyZWN0IHg9IjMwIiB5PSI2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjcwIiByeD0iMTAiIGZpbGw9IiNmOGZhZmMiLz48cmVjdCB4PSIzNSIgeT0iMTQwIiB3aWR0aD0iMTIiIGhlaWdodD0iNTAiIGZpbGw9IiM5NGEzYjgiLz48cmVjdCB4PSI1MyIgeT0iMTQwIiB3aWR0aD0iMTIiIGhlaWdodD0iNTAiIGZpbGw9IiM5NGEzYjgiLz48L3N2Zz4=`
         },
         {
             id: 'walker-2',
             name: 'Sporty Walker',
-            src: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 200"><circle cx="50" cy="30" r="20" fill="%23ef4444"/><rect x="30" y="60" width="40" height="70" rx="10" fill="%23f8fafc"/><rect x="35" y="140" width="12" height="50" fill="%2394a3b8"/><rect x="53" y="140" width="12" height="50" fill="%2394a3b8"/><rect x="20" y="70" width="10" height="40" fill="%23ef4444"/><rect x="70" y="70" width="10" height="40" fill="%23ef4444"/></svg>`
+            src: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMjAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjMwIiByPSIyMCIgZmlsbD0iI2VmNDQ0NCIvPjxyZWN0IHg9IjMwIiB5PSI2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjcwIiByeD0iMTAiIGZpbGw9IiNmOGZhZmMiLz48cmVjdCB4PSIzNSIgeT0iMTQwIiB3aWR0aD0iMTIiIGhlaWdodD0iNTAiIGZpbGw9IiM5NGEzYjgiLz48cmVjdCB4PSI1MyIgeT0iMTQwIiB3aWR0aD0iMTIiIGhlaWdodD0iNTAiIGZpbGw9IiM5NGEzYjgiLz48cmVjdCB4PSIyMCIgeT0iNzAiIHdpZHRoPSIxMCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2VmNDQ0NCIvPjxyZWN0IHg9IjcwIiB5PSI3MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWY0NDQ0Ii8+PC9zdmc+`
         }
     ];
 
