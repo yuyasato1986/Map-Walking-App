@@ -14,9 +14,6 @@ const state = {
     isWalking: false,
     speed: 3, // Multiplier
     animationId: null,
-    currentAvatar: 'walker-red',
-    heading: 0,
-    marker: null,
     lastPanoPos: null
 };
 
@@ -31,31 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initUI() {
 
-    // Avatars
-    if (window.AvatarSystem) {
-        AvatarSystem.renderAvatars('avatar-list', (id) => {
-            state.currentAvatar = id;
-            // Re-render to update selection style
-            AvatarSystem.renderAvatars('avatar-list', (newId) => {
-                state.currentAvatar = newId;
-                AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, state.isWalking);
-                AvatarSystem.renderAvatars('avatar-list', null, state.currentAvatar); // redraw selection
-            }, state.currentAvatar);
-
-            AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, state.isWalking);
-        }, state.currentAvatar);
-
-        // Initial render wrapper logic embedded above for simplicity in global scope context
-        // But for initial load:
-        AvatarSystem.renderAvatars('avatar-list', (id) => {
-            state.currentAvatar = id;
-            AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, state.isWalking);
-            // recursive simple re-bind for selection UI update
-            initUI_refreshAvatarSelection(id);
-        }, state.currentAvatar);
-
-        AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, false);
-    }
 
     // Playback
     document.getElementById('play-pause-btn').addEventListener('click', toggleWalking);
@@ -83,14 +55,6 @@ function initUI() {
     }
 }
 
-function initUI_refreshAvatarSelection(selectedId) {
-    if (!window.AvatarSystem) return;
-    AvatarSystem.renderAvatars('avatar-list', (id) => {
-        state.currentAvatar = id;
-        AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, state.isWalking);
-        initUI_refreshAvatarSelection(id);
-    }, selectedId);
-}
 
 // --- Google Maps Loader ---
 
@@ -257,14 +221,12 @@ function toggleWalking() {
         state.isWalking = false;
         cancelAnimationFrame(state.animationId);
         btn.innerHTML = '<i class="fa-solid fa-play"></i>';
-        if (window.AvatarSystem) AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, false);
     } else {
         // Play
         if (state.currentPath.length === 0) return;
         state.isWalking = true;
         btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
         walkLoop();
-        if (window.AvatarSystem) AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, true);
     }
 }
 
@@ -274,7 +236,6 @@ function resetWalking() {
     state.pathIndex = 0;
     updatePosition(0);
     document.getElementById('play-pause-btn').innerHTML = '<i class="fa-solid fa-play"></i>';
-    if (window.AvatarSystem) AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, false);
 }
 
 function walkLoop() {
@@ -295,7 +256,6 @@ function walkLoop() {
         state.isWalking = false;
         state.pathIndex = state.currentPath.length - 1;
         document.getElementById('play-pause-btn').innerHTML = '<i class="fa-solid fa-play"></i>';
-        if (window.AvatarSystem) AvatarSystem.updateAvatarOverlay('avatar-overlay', state.currentAvatar, false);
         alert('目的地に到着しました！');
         return;
     }
