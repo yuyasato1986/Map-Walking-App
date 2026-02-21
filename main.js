@@ -14,7 +14,9 @@ const state = {
     isWalking: false,
     speed: 3, // Multiplier
     animationId: null,
-    lastPanoPos: null
+    lastPanoPos: null,
+    selectedYear: 2007,
+    streetViewService: null
 };
 
 // --- Initialization ---
@@ -35,6 +37,19 @@ function initUI() {
     document.getElementById('speed-slider').addEventListener('input', (e) => {
         state.speed = parseInt(e.target.value, 10);
     });
+
+    // Year Selector
+    const yearSelect = document.getElementById('year-select');
+    if (yearSelect) {
+        state.selectedYear = parseInt(yearSelect.value, 10);
+        yearSelect.addEventListener('change', (e) => {
+            state.selectedYear = parseInt(e.target.value, 10);
+            if (state.panorama && state.panorama.getPosition()) {
+                // Force update to new year at current position
+                updatePosition(state.pathIndex, true);
+            }
+        });
+    }
 
     // Route
     document.getElementById('calculate-route-btn').addEventListener('click', calculateRoute);
@@ -106,6 +121,7 @@ function initMap() {
 
     // Services
     state.directionsService = new google.maps.DirectionsService();
+    state.streetViewService = new google.maps.StreetViewService();
     state.directionsRenderer = new google.maps.DirectionsRenderer({
         map: state.map,
         preserveViewport: false
@@ -265,7 +281,7 @@ function walkLoop() {
     state.animationId = requestAnimationFrame(walkLoop);
 }
 
-function updatePosition(indexFloat) {
+function updatePosition(indexFloat, forceUpdate = false) {
     if (!state.map || !state.panorama) return;
 
     const i = Math.floor(indexFloat);
@@ -304,8 +320,8 @@ function updatePosition(indexFloat) {
         }
     }
 
-    if (shouldUpdatePano) {
-        state.panorama.setPosition(currentPos);
+    if (shouldUpdatePano || forceUpdate) {
+        setHistoricalPanorama(currentPos);
         state.lastPanoPos = currentPos;
     }
 
@@ -320,4 +336,45 @@ function updatePosition(indexFloat) {
         state.marker.setPosition(currentPos);
     }
     state.map.panTo(currentPos);
+}
+
+/**
+ * Custom function to set Street View to a specific year using internal 'time' data
+ */
+function setHistoricalPanorama(position) {
+    if (!state.streetViewService || !state.panorama) return;
+
+    state.streetViewService.getPanorama({
+        location: position,
+        radius: 50,
+        sources: [google.maps.StreetViewSource.GOOGLE]
+    }, (data, status) => {
+        if (status === google.maps.StreetViewStatus.OK) {
+            // Check for official historical imagery in the (undocumented) 'time' property
+            if (data.time && data.time.length > 0) {
+                // Find pano closest to state.selectedYear
+                let closestPano = data.location.pano;
+                let minDiff = Infinity;
+
+                data.time.forEach(entry => {
+                    // entry.GA is an ISO date string (internal field name might change, but GA is currently used)
+                    // We fall back to other common minified names if needed or try to parse whatever is there
+                    const dateStr = entry.GA || entry.Aa || entry.date;
+                    if (dateStr) {
+                        const year = new Date(dateStr).getFullYear();
+                        const diff = Math.abs(year - state.selectedYear);
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            closestPano = entry.pano;
+                        }
+                    }
+                });
+
+                state.panorama.setPano(closestPano);
+            } else {
+                // Fallback to default position if no timeline is available
+                state.panorama.setPosition(position);
+            }
+        }
+    });
 }

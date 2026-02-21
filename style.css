@@ -104,6 +104,31 @@ input {
     font-size: 0.95rem;
 }
 
+select {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    padding: 12px 0;
+    width: 100%;
+    outline: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+    appearance: none;
+}
+
+select option {
+    background: var(--bg-color);
+    color: var(--text-primary);
+}
+
+.year-selector {
+    margin-top: 8px;
+}
+
+.icon-year {
+    color: #facc15 !important;
+}
+
 
 /* Buttons */
 button {
